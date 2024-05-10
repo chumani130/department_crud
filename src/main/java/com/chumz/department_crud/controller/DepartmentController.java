@@ -1,5 +1,7 @@
 package com.chumz.department_crud.controller;
 
+import com.chumz.department_crud.dto.DepartmentRequest;
+import com.chumz.department_crud.dto.DepartmentResponse;
 import com.chumz.department_crud.entity.DepartmentEntity;
 import com.chumz.department_crud.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +17,21 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     // save operation
-    @GetMapping("/departments")
-    public DepartmentEntity saveDepartment(@Validated @RequestBody DepartmentEntity departmentEntity) {
-        return departmentService.saveDepartment(departmentEntity);
+    @PostMapping("/departments")
+    public DepartmentResponse saveDepartment(@Validated @RequestBody DepartmentRequest departmentRequest) {
+        return departmentService.saveDepartment(departmentRequest);
     }
 
     // Read operation
-    @GetMapping("/departments/{id}")
-    public List<DepartmentEntity> fetchDepartmentList() {
-        return departmentService.fetchDepartList();
+    @GetMapping("/departments")
+    public List<DepartmentResponse> fetchDepartmentList() {
+        return departmentService.fetchDepartmentList();
     }
 
     // update operation
     @PutMapping("/departments/{id}")
-    public DepartmentEntity updateDepartment(@RequestBody DepartmentEntity departmentEntity, @PathVariable("id") Long departmentId) {
-        return departmentService.updateDepartment(departmentEntity, departmentId);
+    public DepartmentResponse updateDepartment(@RequestBody DepartmentRequest departmentRequest, @PathVariable("id") Long departmentId) {
+        return departmentService.updateDepartment(departmentRequest, departmentId);
     }
 
     //delete operation
