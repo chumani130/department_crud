@@ -1,11 +1,14 @@
 // DepartmentServiceImpl.java
 package com.chumz.department_crud.service;
 
+import com.chumz.department_crud.dto.DepartmentRequest;
+import com.chumz.department_crud.dto.DepartmentResponse;
 import com.chumz.department_crud.entity.DepartmentEntity;
 import com.chumz.department_crud.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,36 +18,60 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+
     // save operation
     @Override
-    public DepartmentEntity saveDepartment(DepartmentEntity departmentEntity) {
-        return departmentRepository.save(departmentEntity);
+    public DepartmentResponse saveDepartment(DepartmentRequest departmentRequest) {
+        DepartmentEntity departmentEntity = departmentRepository.save(DepartmentEntity.builder()
+                .code(departmentRequest.getCode())
+                .name(departmentRequest.getName())
+                .address(departmentRequest.getAddress()).build());
+
+
+        return DepartmentResponse.builder().address(departmentEntity.getAddress())
+                .name(departmentEntity.getName())
+                .code(departmentEntity.getCode()).build();
     }
+
+
 
     // read operation
     @Override
-    public List<DepartmentEntity> fetchDepartList() {
-        return (List<DepartmentEntity>) departmentRepository.findAll();
+    public List<DepartmentResponse> fetchDepartmentList() {
+        List<DepartmentResponse> departmentResponses = new ArrayList<>();
+        List<DepartmentEntity> departmentEntities = departmentRepository.findAll();
+
+        for (int i = 0; i < departmentEntities.size(); i++) {
+            DepartmentResponse departmentResponse = DepartmentResponse.builder().address(departmentEntities.get(i).getAddress())
+                    .name(departmentEntities.get(i).getName())
+                    .code(departmentEntities.get(i).getCode()).build();
+            departmentResponses.add(departmentResponse);
+        }
+
+        return departmentResponses;
     }
 
     // update operation
     @Override
-    public DepartmentEntity updateDepartment(DepartmentEntity departmentEntity, Long departmentId) {
+    public DepartmentResponse updateDepartment(DepartmentRequest departmentRequest, Long departmentId) {
             DepartmentEntity depDB = departmentRepository.findById(departmentId).get();
 
-            if (Objects.nonNull(departmentEntity.getDepartmentName()) && !"".equalsIgnoreCase(
-                departmentEntity.getDepartmentName())) {
-                depDB.setDepartmentName(departmentEntity.getDepartmentName());
+            if (Objects.nonNull(departmentRequest.getName()) && !"".equalsIgnoreCase(
+                    departmentRequest.getName())) {
+                depDB.setName(departmentRequest.getName());
             }
-            if (Objects.nonNull(departmentEntity.getDepartmentAddress()) && !"".equalsIgnoreCase(
-                departmentEntity.getDepartmentAddress())) {
-                depDB.setDepartmentAddress(departmentEntity.getDepartmentAddress());
+            if (Objects.nonNull(departmentRequest.getAddress()) && !"".equalsIgnoreCase(
+                    departmentRequest.getAddress())) {
+                depDB.setAddress(departmentRequest.getAddress());
             }
-            if (Objects.nonNull(departmentEntity.getDepartmentCode()) && !"".equalsIgnoreCase(
-                departmentEntity.getDepartmentCode())) {
-                depDB.setDepartmentCode(departmentEntity.getDepartmentCode());
+            if (Objects.nonNull(departmentRequest.getCode()) && !"".equalsIgnoreCase(
+                    departmentRequest.getCode())) {
+                depDB.setCode(departmentRequest.getCode());
             }
-            return departmentRepository.save(depDB);
+        DepartmentEntity departmentEntity = departmentRepository.save(depDB);
+            return DepartmentResponse.builder().address(departmentEntity.getAddress())
+                    .name(departmentEntity.getName())
+                    .code(departmentEntity.getCode()).build();
         }
 
     // delete operation
