@@ -15,16 +15,19 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    // save operation
     @Override
     public DepartmentEntity saveDepartment(DepartmentEntity departmentEntity) {
         return departmentRepository.save(departmentEntity);
     }
 
+    // read operation
     @Override
     public List<DepartmentEntity> fetchDepartList() {
         return (List<DepartmentEntity>) departmentRepository.findAll();
     }
 
+    // update operation
     @Override
     public DepartmentEntity updateDepartment(DepartmentEntity departmentEntity, Long departmentId) {
         DepartmentEntity depDB = departmentRepository.findById(departmentId).orElse(null);
