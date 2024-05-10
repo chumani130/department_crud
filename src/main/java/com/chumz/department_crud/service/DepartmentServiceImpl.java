@@ -30,24 +30,24 @@ public class DepartmentServiceImpl implements DepartmentService {
     // update operation
     @Override
     public DepartmentEntity updateDepartment(DepartmentEntity departmentEntity, Long departmentId) {
-        DepartmentEntity depDB = departmentRepository.findById(departmentId).orElse(null);
+            DepartmentEntity depDB = departmentRepository.findById(departmentId).get();
 
-        if (Objects.nonNull(depDB)) {
-            if (Objects.nonNull(departmentEntity.getDepartmentName()) && !"".equalsIgnoreCase(departmentEntity.getDepartmentName())) {
+            if (Objects.nonNull(departmentEntity.getDepartmentName()) && !"".equalsIgnoreCase(
+                departmentEntity.getDepartmentName())) {
                 depDB.setDepartmentName(departmentEntity.getDepartmentName());
             }
-            if (Objects.nonNull(departmentEntity.getDepartmentAddress()) && !"".equalsIgnoreCase(departmentEntity.getDepartmentAddress())) {
+            if (Objects.nonNull(departmentEntity.getDepartmentAddress()) && !"".equalsIgnoreCase(
+                departmentEntity.getDepartmentAddress())) {
                 depDB.setDepartmentAddress(departmentEntity.getDepartmentAddress());
             }
-            if (Objects.nonNull(departmentEntity.getDepartmentCode()) && !"".equalsIgnoreCase(departmentEntity.getDepartmentCode())) {
+            if (Objects.nonNull(departmentEntity.getDepartmentCode()) && !"".equalsIgnoreCase(
+                departmentEntity.getDepartmentCode())) {
                 depDB.setDepartmentCode(departmentEntity.getDepartmentCode());
             }
             return departmentRepository.save(depDB);
         }
 
-        return null;
-    }
-
+    // delete operation
     @Override
     public void deleteDepartmentById(Long departmentId) {
         departmentRepository.deleteById(departmentId);
